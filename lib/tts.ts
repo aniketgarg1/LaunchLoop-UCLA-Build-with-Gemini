@@ -4,15 +4,41 @@ import { saveGeneratedFile } from "./files";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_AI_API_KEY });
 
+const VOICE_MAP: Record<string, { voice: string; style: string }> = {
+  energetic:    { voice: "Puck",      style: "an upbeat, high-energy, enthusiastic" },
+  professional: { voice: "Charon",    style: "a polished, authoritative, professional" },
+  chill:        { voice: "Aoede",     style: "a calm, relaxed, breezy" },
+  playful:      { voice: "Fenrir",    style: "an excitable, fun, animated" },
+  bold:         { voice: "Alnilam",   style: "a bold, commanding, firm" },
+  inspiring:    { voice: "Sadachbia", style: "a lively, inspiring, motivational" },
+  warm:         { voice: "Sulafat",   style: "a warm, inviting, friendly" },
+  techy:        { voice: "Zephyr",    style: "a bright, modern, tech-forward" },
+  luxury:       { voice: "Algieba",   style: "a smooth, refined, sophisticated" },
+  casual:       { voice: "Zubenelgenubi", style: "a casual, approachable, conversational" },
+};
+
+function pickVoice(vibe: string): { voice: string; style: string } {
+  const key = vibe.toLowerCase().trim();
+  if (VOICE_MAP[key]) return VOICE_MAP[key];
+  for (const [k, v] of Object.entries(VOICE_MAP)) {
+    if (key.includes(k) || k.includes(key)) return v;
+  }
+  return { voice: "Puck", style: "an upbeat, confident, professional" };
+}
+
 export async function generateVoiceover(
   script: string,
-  jobId: string
+  jobId: string,
+  vibe = "energetic"
 ): Promise<string> {
   if (!process.env.GOOGLE_AI_API_KEY) {
     console.warn("No GOOGLE_AI_API_KEY set — using mock voiceover");
     await delay(1800);
     return saveMockVoiceover(jobId);
   }
+
+  const { voice, style } = pickVoice(vibe);
+  console.log(`TTS: using voice "${voice}" (${style}) for vibe "${vibe}"`);
 
   try {
     const response = await ai.models.generateContent({
@@ -21,7 +47,7 @@ export async function generateVoiceover(
         {
           parts: [
             {
-              text: `Read the following promo script in an energetic, confident, professional voice suitable for an event trailer:\n\n${script}`,
+              text: `Read the following promo script in ${style} voice suitable for an event trailer. IMPORTANT: Speak at a brisk but clear pace so the entire script finishes well within 14 seconds — do NOT speak slowly. Leave a brief pause at the start and end:\n\n${script}`,
             },
           ],
         },
@@ -30,7 +56,7 @@ export async function generateVoiceover(
         responseModalities: ["AUDIO"],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: "Kore" },
+            prebuiltVoiceConfig: { voiceName: voice },
           },
         },
       },
@@ -44,7 +70,6 @@ export async function generateVoiceover(
     }
 
     const pcmBuffer = Buffer.from(audioData, "base64");
-
     const wavBuffer = wrapPcmInWav(pcmBuffer, 24000, 1, 16);
 
     const filename = `voice-${jobId}.wav`;

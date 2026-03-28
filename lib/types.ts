@@ -5,6 +5,7 @@ export type BriefInput = {
   cta: string;
   description?: string;
   eventDate?: string;
+  eventEndDate?: string;
   eventTime?: string;
   logoPath?: string;
   qrCodePath?: string;
@@ -29,9 +30,13 @@ export type CreativePlan = {
 
 export type JobAssets = {
   posterUrl?: string;
+  storyPosterUrl?: string;
   reelUrl?: string;
+  reelMusicUrl?: string;
   voiceUrl?: string;
   musicUrl?: string;
+  finalNarratedUrl?: string;
+  finalMusicUrl?: string;
 };
 
 export type JobStatus =
@@ -40,6 +45,7 @@ export type JobStatus =
   | "poster"
   | "video"
   | "voice"
+  | "stitching"
   | "done"
   | "error";
 

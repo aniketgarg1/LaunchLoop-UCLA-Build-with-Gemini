@@ -105,176 +105,107 @@ export default function BriefForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Logo + QR uploads side by side */}
+    <form onSubmit={handleSubmit} className="space-y-4.5">
+      {/* File uploads */}
       <div className="grid grid-cols-2 gap-3">
-        {/* Logo upload */}
         <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Club / Event Logo
+          <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+            Logo
           </label>
           <div
             onClick={() => logoInputRef.current?.click()}
-            className="border-2 border-dashed border-white/10 hover:border-indigo-500/40 rounded-xl p-4 text-center cursor-pointer transition-colors group min-h-[120px] flex items-center justify-center"
+            className="border border-dashed border-white/[0.12] hover:border-indigo-300/50 bg-white/[0.015] rounded-xl p-3 cursor-pointer transition-colors h-[72px] flex items-center justify-center"
           >
             {logoPreview ? (
-              <div className="flex flex-col items-center gap-1.5">
-                <img
-                  src={logoPreview}
-                  alt="Logo preview"
-                  className="w-12 h-12 object-contain rounded-lg"
-                />
-                <span className="text-[11px] text-white/40 truncate max-w-full">
+              <div className="flex items-center gap-2">
+                <img src={logoPreview} alt="Logo" className="w-7 h-7 object-contain rounded" />
+                <span className="text-[11px] text-zinc-400 truncate max-w-[80px]">
                   {logoFile?.name}
                 </span>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-1.5">
-                <div className="w-10 h-10 rounded-lg bg-white/5 group-hover:bg-indigo-500/10 flex items-center justify-center transition-colors">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    className="text-white/30 group-hover:text-indigo-400 transition-colors"
-                  >
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                    <polyline points="17 8 12 3 7 8" />
-                    <line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
-                </div>
-                <span className="text-xs text-white/30 group-hover:text-white/50 transition-colors">
-                  Upload logo
-                </span>
-              </div>
+              <span className="text-[12px] text-zinc-500">Upload logo</span>
             )}
-            <input
-              ref={logoInputRef}
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleFileSelect(e, "logo")}
-              className="hidden"
-            />
+            <input ref={logoInputRef} type="file" accept="image/*" onChange={(e) => handleFileSelect(e, "logo")} className="hidden" />
           </div>
         </div>
-
-        {/* QR Code upload */}
         <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            QR Code
+          <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+            QR code
           </label>
           <div
             onClick={() => qrInputRef.current?.click()}
-            className="border-2 border-dashed border-white/10 hover:border-purple-500/40 rounded-xl p-4 text-center cursor-pointer transition-colors group min-h-[120px] flex items-center justify-center"
+            className="border border-dashed border-white/[0.12] hover:border-indigo-300/50 bg-white/[0.015] rounded-xl p-3 cursor-pointer transition-colors h-[72px] flex items-center justify-center"
           >
             {qrPreview ? (
-              <div className="flex flex-col items-center gap-1.5">
-                <img
-                  src={qrPreview}
-                  alt="QR code preview"
-                  className="w-12 h-12 object-contain rounded-lg"
-                />
-                <span className="text-[11px] text-white/40 truncate max-w-full">
+              <div className="flex items-center gap-2">
+                <img src={qrPreview} alt="QR" className="w-7 h-7 object-contain rounded" />
+                <span className="text-[11px] text-zinc-400 truncate max-w-[80px]">
                   {qrFile?.name}
                 </span>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-1.5">
-                <div className="w-10 h-10 rounded-lg bg-white/5 group-hover:bg-purple-500/10 flex items-center justify-center transition-colors">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    className="text-white/30 group-hover:text-purple-400 transition-colors"
-                  >
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="3" height="3" rx="0.5" />
-                    <rect x="18" y="14" width="3" height="3" rx="0.5" />
-                    <rect x="14" y="18" width="3" height="3" rx="0.5" />
-                    <rect x="18" y="18" width="3" height="3" rx="0.5" />
-                  </svg>
-                </div>
-                <span className="text-xs text-white/30 group-hover:text-white/50 transition-colors">
-                  Upload QR code
-                </span>
-              </div>
+              <span className="text-[12px] text-zinc-500">Upload QR code</span>
             )}
-            <input
-              ref={qrInputRef}
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleFileSelect(e, "qr")}
-              className="hidden"
-            />
+            <input ref={qrInputRef} type="file" accept="image/*" onChange={(e) => handleFileSelect(e, "qr")} className="hidden" />
           </div>
         </div>
       </div>
 
       {/* Event name */}
       <div>
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          Event Name <span className="text-indigo-400">*</span>
+        <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+          Event name <span className="text-zinc-600">*</span>
         </label>
         <input
           type="text"
           value={form.eventName}
           onChange={(e) => handleChange("eventName", e.target.value)}
           placeholder="LA Google DeepMind Hackathon"
-          className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm"
+          className="form-input"
         />
       </div>
 
-      {/* Date & Time */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Dates */}
+      <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Event Date
+          <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+            Start date
           </label>
-          <input
-            type="date"
-            value={form.eventDate || ""}
-            onChange={(e) => handleChange("eventDate", e.target.value)}
-            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm [color-scheme:dark]"
-          />
+          <input type="date" value={form.eventDate || ""} onChange={(e) => handleChange("eventDate", e.target.value)} className="form-input [color-scheme:dark]" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Event Time
+          <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+            End date
           </label>
-          <input
-            type="time"
-            value={form.eventTime || ""}
-            onChange={(e) => handleChange("eventTime", e.target.value)}
-            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm [color-scheme:dark]"
-          />
+          <input type="date" value={form.eventEndDate || ""} onChange={(e) => handleChange("eventEndDate", e.target.value)} className="form-input [color-scheme:dark]" />
+        </div>
+        <div>
+          <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+            Time
+          </label>
+          <input type="time" value={form.eventTime || ""} onChange={(e) => handleChange("eventTime", e.target.value)} className="form-input [color-scheme:dark]" />
         </div>
       </div>
 
       {/* Audience */}
       <div>
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          Target Audience <span className="text-indigo-400">*</span>
+        <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+          Target audience <span className="text-zinc-600">*</span>
         </label>
         <input
           type="text"
           value={form.audience}
           onChange={(e) => handleChange("audience", e.target.value)}
           placeholder="College students interested in AI"
-          className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm"
+          className="form-input"
         />
       </div>
 
       {/* Vibe */}
       <div>
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          Vibe <span className="text-indigo-400">*</span>
+        <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+          Vibe <span className="text-zinc-600">*</span>
         </label>
         <div className="flex flex-wrap gap-2">
           {vibeOptions.map((v) => (
@@ -282,10 +213,10 @@ export default function BriefForm() {
               key={v}
               type="button"
               onClick={() => handleChange("vibe", v)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-[12px] font-medium capitalize transition-all ${
                 form.vibe === v
-                  ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/25"
-                  : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70"
+                  ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-[0_8px_20px_rgba(99,102,241,0.35)]"
+                  : "bg-white/[0.03] text-zinc-400 hover:bg-white/[0.07] hover:text-zinc-200 border border-white/[0.08]"
               }`}
             >
               {v}
@@ -296,52 +227,50 @@ export default function BriefForm() {
 
       {/* CTA */}
       <div>
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          Call to Action <span className="text-indigo-400">*</span>
+        <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+          Call to action <span className="text-zinc-600">*</span>
         </label>
         <input
           type="text"
           value={form.cta}
           onChange={(e) => handleChange("cta", e.target.value)}
           placeholder="Register now"
-          className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm"
+          className="form-input"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          Short Description
+        <label className="block text-[11px] tracking-wide uppercase text-zinc-500 mb-1.5">
+          Description
         </label>
         <textarea
           value={form.description}
           onChange={(e) => handleChange("description", e.target.value)}
-          placeholder="A student hackathon focused on generative media tools and creative building"
-          rows={3}
-          className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all text-sm resize-none"
+          placeholder="A student hackathon focused on generative media tools"
+          rows={2}
+          className="form-input resize-none"
         />
       </div>
 
-      {/* Error */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">
+        <div className="rounded-xl bg-red-500/5 border border-red-500/20 px-3 py-2.5 text-red-300 text-[13px]">
           {error}
         </div>
       )}
 
-      {/* Submit */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full relative overflow-hidden rounded-xl py-3.5 px-6 font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 text-sm"
+        className="w-full rounded-xl py-3 px-4 font-semibold text-[14px] text-white bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[0_10px_30px_rgba(99,102,241,0.35)]"
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
-            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Generating your promo kit...
+            <div className="w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin" />
+            Generating...
           </span>
         ) : (
-          "Generate Promo Kit"
+          "Generate promo kit"
         )}
       </button>
     </form>

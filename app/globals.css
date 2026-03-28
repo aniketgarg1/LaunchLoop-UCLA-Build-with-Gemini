@@ -1,46 +1,118 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050508;
-  --foreground: #ededed;
+  --background: #09090b;
+  --foreground: #f4f4f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 12% -8%, rgba(129, 140, 248, 0.3), transparent 34%),
+    radial-gradient(circle at 85% -12%, rgba(45, 212, 191, 0.16), transparent 31%),
+    radial-gradient(circle at 50% 120%, rgba(56, 189, 248, 0.09), transparent 40%),
+    linear-gradient(180deg, #0a0b12 0%, #090a10 46%, #07070c 100%),
+    var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.2);
   color: white;
 }
 
 ::-webkit-scrollbar {
   width: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
 audio::-webkit-media-controls-panel {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  border-radius: 8px;
+}
+
+.glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+/* Pipeline glow */
+@keyframes pipelinePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 12px 2px rgba(99, 102, 241, 0.15); }
+}
+
+.pipeline-active {
+  animation: pipelinePulse 2s ease-in-out infinite;
+}
+
+/* Confetti */
+@keyframes confettiFall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  top: -10px;
+  z-index: 100;
+  animation: confettiFall 3s ease-in forwards;
+  pointer-events: none;
+}
+
+/* Shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-loading {
+  background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Form inputs */
+.form-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #f4f4f5;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(161, 161, 170, 0.45);
+}
+
+.form-input:focus {
+  border-color: rgba(129, 140, 248, 0.55);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }

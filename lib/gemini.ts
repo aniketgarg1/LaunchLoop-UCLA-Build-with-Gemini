@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { BriefInput, CreativePlan } from "./types";
 import { buildPlannerPrompt } from "./prompts";
-import { delay } from "./utils";
+import { delay, buildDateLine } from "./utils";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_AI_API_KEY });
 
@@ -18,7 +18,7 @@ export async function generateCreativePlan(
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-3-flash-preview",
       contents: prompt,
     });
 
@@ -31,7 +31,7 @@ export async function generateCreativePlan(
 
     const plan = JSON.parse(jsonMatch[0]) as CreativePlan;
 
-    if (!plan.title || !plan.scenes || plan.scenes.length !== 3) {
+    if (!plan.title || !plan.scenes || plan.scenes.length < 1) {
       throw new Error("Invalid plan structure from Gemini");
     }
 
@@ -43,35 +43,27 @@ export async function generateCreativePlan(
 }
 
 function generateMockPlan(brief: BriefInput): CreativePlan {
-  const dateStr = brief.eventDate || "TBA";
-  const timeStr = brief.eventTime || "";
-  const dateTimeLine = timeStr ? `${dateStr} at ${timeStr}` : dateStr;
+  const dateLine = buildDateLine(brief);
 
   return {
     title: brief.eventName,
     tagline: `Where ${brief.vibe} meets innovation`,
     visualStyle: `Live-action photorealistic cinematography with ${brief.vibe} energy, real people, dramatic lighting, and cinematic camera movements`,
-    posterPrompt: `A bold vertical event poster for "${brief.eventName}". ${brief.vibe} aesthetic with dark background, neon blue and purple gradients. Large bold title text. Date: ${dateTimeLine}. Targeting ${brief.audience}. Call to action: ${brief.cta}. Premium, modern design.${brief.qrCodePath ? " Include a QR code in the bottom-right corner." : ""}`,
-    voiceoverScript: `Get ready for ${brief.eventName}${dateStr !== "TBA" ? ` on ${dateStr}` : ""}. ${brief.description || `An incredible event for ${brief.audience}`}. This is your moment. ${brief.cta} — the future starts now.`,
-    musicPrompt: `${brief.vibe} electronic background music, 120 BPM, building from ambient intro to driving beats, modern synth production, cinematic energy arc, suitable for a tech event promo trailer`,
+    posterPrompt: `A bold SQUARE 1080x1080 event poster for "${brief.eventName}". ${brief.vibe} aesthetic with dark background, neon blue and purple gradients. Large bold title text, modern typography. Date prominently displayed: "${dateLine}". Targeting ${brief.audience}. Call to action: "${brief.cta}". Premium graphic design, professional layout. Square 1:1 format. Do NOT include any QR code in the design.`,
+    voiceoverScript: `Get ready for ${brief.eventName}${dateLine !== "TBA" ? `, ${dateLine}` : ""}. ${brief.description || `The event ${brief.audience} have been waiting for`}. ${brief.cta} — don't miss out.`,
+    musicPrompt: `${brief.vibe} cinematic background music, 16 seconds, 120 BPM. Punchy intro building to climax with modern electronic production. Mixed behind voiceover.`,
     scenes: [
       {
         id: 1,
-        title: "The Arrival",
-        prompt: `Live-action cinematic shot: real people walking into a modern tech venue, excited energy, ${brief.vibe} atmosphere. Text overlay: "${brief.eventName}" and "${dateTimeLine}". Photorealistic, real humans, dramatic lighting. 9:16 vertical format.`,
-        durationSec: 4,
+        title: "The Hook",
+        prompt: `Live-action cinematic opening: dramatic establishing shot, ${brief.vibe} energy. Bold text overlay: "${brief.eventName}" and "${dateLine}". Photorealistic, cinematic. 9:16 vertical. 8 seconds.`,
+        durationSec: 8,
       },
       {
         id: 2,
-        title: "The Energy",
-        prompt: `Live-action montage: real diverse ${brief.audience} collaborating at laptops, whiteboarding ideas, laughing and building together. Text overlay showing key event details. ${brief.vibe} lighting. Photorealistic, cinematic. 9:16 vertical format.`,
-        durationSec: 5,
-      },
-      {
-        id: 3,
         title: "The Call",
-        prompt: `Live-action finale: real crowd cheering, hands raised, triumphant moment. Bold text overlay: "${brief.cta}". ${brief.qrCodePath ? "QR code visible on screen." : ""} ${brief.vibe} color grading. Photorealistic, cinematic. 9:16 vertical format.`,
-        durationSec: 4,
+        prompt: `Live-action epic finale: real ${brief.audience} in action, celebrating, bold CTA text overlay: "${brief.cta}" and "${dateLine}". Photorealistic, cinematic. 9:16 vertical. 8 seconds.`,
+        durationSec: 8,
       },
     ],
   };

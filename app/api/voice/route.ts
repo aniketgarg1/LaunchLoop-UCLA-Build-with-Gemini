@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const voiceUrl = await generateVoiceover(job.plan.voiceoverScript, jobId);
+    const voiceUrl = await generateVoiceover(job.plan.voiceoverScript, jobId, job.brief.vibe);
 
     await updateJobAssets(jobId, {
       status: "done",

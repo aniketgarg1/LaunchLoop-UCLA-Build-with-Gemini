@@ -8,19 +8,17 @@ interface StoryboardCardProps {
 
 export default function StoryboardCard({ scene }: StoryboardCardProps) {
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-5 hover:border-indigo-500/20 transition-colors group">
-      <div className="flex items-start justify-between mb-3">
+    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4 hover:border-white/[0.1] transition-colors">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-xs font-bold text-indigo-400">
+          <span className="w-5 h-5 rounded bg-indigo-600/20 flex items-center justify-center text-[10px] font-medium text-indigo-400">
             {scene.id}
-          </div>
-          <h4 className="text-sm font-semibold text-white/90">{scene.title}</h4>
+          </span>
+          <h4 className="text-[13px] font-medium text-zinc-300">{scene.title}</h4>
         </div>
-        <span className="text-[11px] font-mono text-white/30 bg-white/5 px-2 py-0.5 rounded-md">
-          {scene.durationSec}s
-        </span>
+        <span className="text-[10px] text-zinc-600 font-mono">{Number(scene.durationSec) || 0}s</span>
       </div>
-      <p className="text-xs text-white/40 leading-relaxed">{scene.prompt}</p>
+      <p className="text-[12px] text-zinc-500 leading-relaxed">{scene.prompt}</p>
     </div>
   );
 }

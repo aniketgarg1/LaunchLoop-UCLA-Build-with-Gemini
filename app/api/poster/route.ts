@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loadJob, updateJobAssets } from "@/lib/jobs";
-import { generatePoster } from "@/lib/nanoBanana";
+import { generatePoster, generateStoryPoster } from "@/lib/nanoBanana";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,18 +19,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const posterUrl = await generatePoster(
-      job.plan.posterPrompt,
-      job.brief.logoPath,
-      job.brief.qrCodePath,
-      jobId
-    );
+    const [posterUrl, storyPosterUrl] = await Promise.all([
+      generatePoster(
+        job.plan.posterPrompt,
+        job.brief.logoPath,
+        job.brief.qrCodePath,
+        jobId
+      ),
+      generateStoryPoster(
+        job.plan.posterPrompt,
+        job.brief.logoPath,
+        job.brief.qrCodePath,
+        jobId
+      ),
+    ]);
 
     await updateJobAssets(jobId, {
-      assets: { posterUrl },
+      assets: { posterUrl, storyPosterUrl },
     });
 
-    return NextResponse.json({ posterUrl });
+    return NextResponse.json({ posterUrl, storyPosterUrl });
   } catch (err) {
     console.error("Poster error:", err);
     return NextResponse.json(

@@ -1,35 +1,50 @@
+import { GoogleGenAI } from "@google/genai";
 import { delay } from "./utils";
 import { saveGeneratedFile } from "./files";
 
-// TODO: Stretch goal — Replace with real Lyria API for music generation
-// Lyria generates background music from text prompts.
-// Expected flow:
-//   1. Send musicPrompt to Lyria API
-//   2. Receive audio buffer
-//   3. Save and return URL
+const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_AI_API_KEY });
 
 export async function generateMusic(
   musicPrompt: string,
   jobId: string
 ): Promise<string> {
-  // TODO: Wire real Lyria API here
-  // const response = await fetch("https://api.lyria.google/generate", {
-  //   method: "POST",
-  //   headers: { Authorization: `Bearer ${process.env.LYRIA_API_KEY}` },
-  //   body: JSON.stringify({ prompt: musicPrompt, duration: 15 }),
-  // });
-  // const audioBuffer = Buffer.from(await response.arrayBuffer());
+  if (!process.env.GOOGLE_AI_API_KEY) {
+    console.warn("No GOOGLE_AI_API_KEY — using mock music");
+    await delay(2500);
+    return saveMockMusic(jobId);
+  }
 
-  await delay(2500);
+  try {
+    console.log("Lyria 3 Clip: generating music...");
+    const response = await ai.models.generateContent({
+      model: "lyria-3-clip-preview",
+      contents: musicPrompt,
+      config: {
+        responseModalities: ["AUDIO"],
+      },
+    });
 
-  const mockAudio = generateMockMusicWav(musicPrompt);
-  const filename = `music-${jobId}.wav`;
-  return saveGeneratedFile(mockAudio, filename);
+    const audioPart = response.candidates?.[0]?.content?.parts?.find(
+      (p: any) => p.inlineData
+    );
+
+    if (!audioPart?.inlineData?.data) {
+      throw new Error("No audio data in Lyria response");
+    }
+
+    const audioBuffer = Buffer.from(audioPart.inlineData.data, "base64");
+    const filename = `music-${jobId}.mp3`;
+    console.log("Lyria 3 Clip: music generated successfully");
+    return saveGeneratedFile(audioBuffer, filename);
+  } catch (err) {
+    console.error("Lyria 3 error, falling back to mock:", err);
+    return saveMockMusic(jobId);
+  }
 }
 
-function generateMockMusicWav(_prompt: string): Buffer {
+async function saveMockMusic(jobId: string): Promise<string> {
   const sampleRate = 22050;
-  const durationSec = 12;
+  const durationSec = 16;
   const numSamples = sampleRate * durationSec;
   const dataSize = numSamples * 2;
   const buffer = Buffer.alloc(44 + dataSize);
@@ -61,5 +76,6 @@ function generateMockMusicWav(_prompt: string): Buffer {
     buffer.writeInt16LE(Math.round(Math.max(-32768, Math.min(32767, sample))), 44 + i * 2);
   }
 
-  return buffer;
+  const filename = `music-${jobId}.wav`;
+  return saveGeneratedFile(buffer, filename);
 }

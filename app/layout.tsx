@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "LaunchLoop — From brief to buzz",
+  title: "LaunchLoop",
   description:
-    "Turn a logo and short event brief into a branded promo kit with poster, reel, and voiceover.",
+    "Turn a short event brief into a branded promo kit — poster, reel, voiceover, and music.",
 };
 
 export default function RootLayout({
@@ -25,11 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
-    >
-      <body className="min-h-full flex flex-col bg-[#050508]">
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-[#0a0a0b] text-zinc-100">
         <Header />
         <main className="flex-1">{children}</main>
       </body>

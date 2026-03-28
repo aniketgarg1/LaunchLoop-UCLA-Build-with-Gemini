@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loadJob, updateJobAssets } from "@/lib/jobs";
-import { generateReel } from "@/lib/veo";
+import { generateBaseReel } from "@/lib/veo";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,11 +19,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const reelUrl = await generateReel(job.plan.scenes, jobId, {
-      eventName: job.brief.eventName,
-      cta: job.brief.cta,
-      hasQr: !!job.brief.qrCodePath,
-    });
+    const reelUrl = await generateBaseReel(
+      job.plan.scenes,
+      jobId,
+      job.brief,
+      job.plan.voiceoverScript
+    );
 
     await updateJobAssets(jobId, {
       status: "voice",
