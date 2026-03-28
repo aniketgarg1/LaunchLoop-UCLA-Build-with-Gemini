@@ -15,6 +15,8 @@ It is built for hackathons, college events, product launches, and demo-day style
 
 <img width="1496" height="333" alt="image" src="https://github.com/user-attachments/assets/600f758c-f9a4-4eb4-9641-9649a5b984a1" />
 <img width="1494" height="701" alt="image" src="https://github.com/user-attachments/assets/e0c5dcd8-ee41-4bb8-8fea-4cfce5c4dc1c" />
+<img width="1496" height="618" alt="image" src="https://github.com/user-attachments/assets/05e507d1-ab94-4174-8993-09c4c0713333" />
+<img width="1454" height="663" alt="image" src="https://github.com/user-attachments/assets/64da8c89-9f0b-4ad0-879b-89eb769ab95d" />
 
 
 
