@@ -1,36 +1,168 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LaunchLoop
+
+LaunchLoop is an AI-powered event promo generator that turns a single event brief into a complete launch kit in minutes.
+
+From one form submission, it creates:
+- a square event poster
+- an Instagram Story poster
+- a short promo reel
+- an AI voiceover
+- background music
+- a downloadable zip of final assets
+
+It is built for hackathons, college events, product launches, and demo-day style campaigns where speed matters more than running a full creative pipeline by hand.
+
+## What It Does
+
+Users enter their event details once, optionally upload a logo and QR code, and LaunchLoop automatically:
+
+1. generates a creative plan and storyboard
+2. creates branded poster assets
+3. generates a vertical promo reel
+4. creates voiceover and soundtrack
+5. stitches final media together
+6. packages everything into a downloadable kit
+
+## Demo Flow
+
+The app is designed to feel like a single end-to-end creative workflow:
+
+1. Fill out the event brief on the home page
+2. Upload optional brand/logo and registration QR assets
+3. Generate a creative plan
+4. Watch posters, video, voice, and music render in parallel
+5. Review the storyboard and preview cards
+6. Download the final promo kit as a zip
+
+## Tech Stack
+
+- `Next.js 16`
+- `React 19`
+- `TypeScript`
+- `Tailwind CSS 4`
+- `Framer Motion`
+- `Google GenAI SDK`
+- `FFmpeg` and `ffprobe` for media stitching
+
+## AI Pipeline
+
+LaunchLoop uses different Google models for each stage of the workflow:
+
+- `Gemini` for creative planning and structured campaign output
+- `Gemini image generation` for posters
+- `Veo` for short live-action style promo clips
+- `Gemini TTS` for voiceover
+- `Lyria` for background music
+
+If `GOOGLE_AI_API_KEY` is missing or a generation step fails, the app falls back to mock outputs so the UI can still be demoed locally.
+
+## Project Structure
+
+```text
+app/
+  api/
+    plan/         # creative plan generation
+    poster/       # square + story poster generation
+    video/        # reel generation
+    voice/        # voiceover generation
+    music/        # soundtrack generation
+    stitch/       # video/audio merge and QR overlay
+    download/     # zip export
+    upload-logo/  # logo + QR upload
+  results/[jobId]/ # generated asset review page
+
+components/       # UI cards, previews, pipeline states
+lib/              # model wrappers, prompts, file helpers, job storage
+tmp/jobs/         # persisted job JSON records
+public/generated/ # generated assets served by the app
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Add environment variables
+
+Create a local env file and add:
+
+```bash
+GOOGLE_AI_API_KEY=your_key_here
+```
+
+### 3. Make sure media tools are installed
+
+LaunchLoop uses `ffmpeg` and `ffprobe` during the stitch step.
+
+Check they are available:
+
+```bash
+ffmpeg -version
+ffprobe -version
+```
+
+### 4. Run the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How Data Is Stored
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Job state is stored locally in `tmp/jobs`
+- Uploaded files are stored in `tmp/uploads`
+- Generated assets are written to `public/generated`
 
-## Learn More
+This makes local demos easy because each generation run leaves behind inspectable artifacts and job records.
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Single-form event brief input
+- Optional logo and QR upload
+- Auto-generated campaign title, tagline, script, and storyboard
+- Poster generation in square and story formats
+- Short-form vertical reel generation
+- Voice and music generation as separate assets
+- Final stitched media outputs for preview and download
+- Zip export for the full promo kit
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Overview
 
-## Deploy on Vercel
+- `POST /api/plan` creates a job and generates the creative plan
+- `POST /api/poster` generates poster assets
+- `POST /api/video` generates the base reel
+- `POST /api/voice` generates narration
+- `POST /api/music` generates soundtrack
+- `POST /api/stitch` merges media and overlays QR where available
+- `GET /api/download?jobId=...` returns a zip file of generated assets
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Why This Project Exists
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+LaunchLoop is meant to compress the usual event marketing workflow into one fast loop:
+
+- brief
+- generate
+- review
+- ship
+
+Instead of juggling separate tools for copy, design, video, audio, and export, the project demonstrates how a single AI-native workflow can produce a launch-ready promo kit from one input.
+
+## Notes
+
+- Do not commit real API keys or secrets to GitHub
+- Generated quality depends on model availability and API access
+- Without a valid Google AI key, the app still runs with mock fallback assets for presentation purposes
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
