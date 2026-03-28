@@ -48,17 +48,23 @@ The app is designed to feel like a single end-to-end creative workflow:
 - `Tailwind CSS 4`
 - `Framer Motion`
 - `Google GenAI SDK`
+- `nanoBanana` poster generation module
+- `UUID` for job IDs
+- `Archiver` for zip export
+- local filesystem storage for jobs, uploads, and generated assets
 - `FFmpeg` and `ffprobe` for media stitching
 
 ## AI Pipeline
 
-LaunchLoop uses different Google models for each stage of the workflow:
+LaunchLoop uses a multi-stage AI pipeline rather than a single chatbot flow. Each stage is handled by the tool best suited for that part of the campaign:
 
 - `Gemini` for creative planning and structured campaign output
-- `Gemini image generation` for posters
+- `nanoBanana` as the app's poster-generation layer, backed by `Gemini image generation`
 - `Veo` for short live-action style promo clips
 - `Gemini TTS` for voiceover
 - `Lyria` for background music
+
+This is what keeps the product consistent across formats: one brief becomes one shared creative plan, and that plan drives every generated asset.
 
 If `GOOGLE_AI_API_KEY` is missing or a generation step fails, the app falls back to mock outputs so the UI can still be demoed locally.
 
@@ -157,6 +163,18 @@ LaunchLoop is meant to compress the usual event marketing workflow into one fast
 - ship
 
 Instead of juggling separate tools for copy, design, video, audio, and export, the project demonstrates how a single AI-native workflow can produce a launch-ready promo kit from one input.
+
+## What Makes It Different
+
+LaunchLoop is not just a chatbot and not just a thin wrapper around one model API.
+
+- It does not stop at text responses; it generates real campaign assets
+- It orchestrates multiple generation steps across planning, posters, video, voice, and music
+- It stores job state, uploaded assets, and generated outputs across the workflow
+- It post-processes media with `FFmpeg` to create final previewable and downloadable deliverables
+- It keeps outputs aligned by using one shared creative plan for the whole campaign
+
+That is what makes it feel like a product pipeline, not just a prompt box.
 
 ## Notes
 
